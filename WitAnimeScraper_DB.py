@@ -9,15 +9,17 @@ from selenium import webdriver
 import pandas as pd
 from selenium.webdriver.common.by import By
 
-dp = '/Users/aziz/PycharmProjects/scrapingAnime/chromedriver-1'
+#  Get the Webpage content 
+dp = '/Users/aziz/PycharmProjects/scrapingAnime/chromedriver-1' # driver path
 driver = Chrome(dp)
-
 url = f"https://witanime.com/anime-type/tv/"
 page = (requests.get(url))
 content = page.content
 soup = BeautifulSoup(content, 'lxml')
+# find all the animes' name
 all_names = soup.find_all("div", class_="anime-card-title")
 
+#remove any special characters 
 clean = []
 for name in all_names:
 	clean.append(re.sub(f"!", "", name.find('a').text))
@@ -29,7 +31,7 @@ out_list = [''.join(x for x in string if not x in special_char) for string in cl
 dd = []
 newname = []
 
-
+# function to find how many episodes in each anime
 def get_lenght(anime_name):
 	Anime_Name = anime_name.replace(" ", '-')
 	url2 = f"https://witanime.com/episode/{Anime_Name}-%d8%a7%d9%84%d8%ad%d9%84%d9%82%d8%a9-1/"
